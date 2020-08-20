@@ -43,7 +43,7 @@ Deno.test("should create two batches for order 1 and one batch for order 2", asy
 
   await delay(50);
 
-  // after another 50 ms, first order 1 batch should have expired.
+  // After another 50 ms, first order 1 batch should have expired.
   assertEquals(recordedBatches.order1.length, 1);
   assertEquals(recordedBatches.order1[0], [
     { id: "1", data: { backorderQuantity: 15 } },
@@ -52,10 +52,13 @@ Deno.test("should create two batches for order 1 and one batch for order 2", asy
 
   dispatchUpdateEvent("order1", { id: "1", data: { backorderQuantity: 12 } });
 
+
   await delay(100);
 
   const { order1: order1Batches, order2: order2Batches } = recordedBatches;
 
+  // After dispatching another order 1 event and waiting 100 ms,
+  // there should be two order 1 batches.
   assertEquals(order1Batches.length, 2);
   assertEquals(order1Batches[0], [
     { id: "1", data: { backorderQuantity: 15 } },
